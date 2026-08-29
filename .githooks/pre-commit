@@ -1,0 +1,38 @@
+#!/bin/sh
+
+set -eu
+
+status_file=$(mktemp -t valle-tietar-secrets.XXXXXX)
+trap 'rm -f "$status_file"' EXIT HUP INT TERM
+printf '0\n' > "$status_file"
+
+git diff --cached --name-only --diff-filter=ACMR | while IFS= read -r file; do
+  case "$file" in
+    .env|.env.*|*/.env|*/.env.*)
+      case "$file" in
+        .env.example|*/.env.example) ;;
+        *)
+          echo "ERROR: no se permite incluir $file en Git."
+          printf '1\n' > "$status_file"
+          ;;
+      esac
+      ;;
+  esac
+
+  if [ "$file" = ".githooks/pre-commit" ]; then
+    continue
+  fi
+
+  if git show ":$file" 2>/dev/null | LC_ALL=C grep -Eq \
+    'sb_secret_[A-Za-z0-9_-]+|SUPABASE_SERVICE_ROLE_KEY[[:space:]]*=[[:space:]]*[^[:space:]]+|-----BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY-----'; then
+    echo "ERROR: se ha detectado un posible secreto en $file."
+    printf '1\n' > "$status_file"
+  fi
+done
+
+if [ "$(cat "$status_file")" -ne 0 ]; then
+  echo "Commit cancelado para evitar publicar credenciales."
+  exit 1
+fi
+
+exit 0
