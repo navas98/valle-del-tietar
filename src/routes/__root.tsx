@@ -146,7 +146,7 @@ function RootComponent() {
         <RoleGate />
         <NegocioGate />
         <VisitanteGate />
-        {/* Términos y Condiciones: bloquea el registro (no el login) hasta aceptarlos. */}
+        {/* Google puede registrar desde el login: ambos accesos exigen aceptar los Términos. */}
         <TerminosDialog />
         <Toaster />
       </AuthProvider>

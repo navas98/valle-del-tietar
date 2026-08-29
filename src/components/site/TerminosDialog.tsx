@@ -54,7 +54,9 @@ export function TerminosDialog() {
     <Dialog open={open} onOpenChange={(next) => !next && cancelTerms()}>
       <DialogContent className="flex max-h-[85vh] flex-col sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>Antes de registrarte</DialogTitle>
+          <DialogTitle>
+            {termsIntent === "register" ? "Antes de registrarte" : "Antes de iniciar sesión"}
+          </DialogTitle>
           <DialogDescription>
             Para continuar tienes que leer y aceptar los Términos y Condiciones de Uso.
           </DialogDescription>

@@ -1,6 +1,5 @@
-import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import type { Session, User } from "@supabase/supabase-js";
-import { toast } from "sonner";
 import { supabase } from "./supabase";
 import type { Database } from "./database.types";
 
@@ -8,28 +7,19 @@ export type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 
 const INTENT_KEY = "sotillo_auth_intent";
 
-function isNewAccount(user: User) {
-  if (!user.last_sign_in_at) return true;
-  const created = new Date(user.created_at).getTime();
-  const lastSignIn = new Date(user.last_sign_in_at).getTime();
-  return Math.abs(lastSignIn - created) < 5000;
-}
-
 type AuthContextValue = {
   session: Session | null;
   user: User | null;
   profile: Profile | null;
   loading: boolean;
   /**
-   * Inicia el login con Google. Si el intent es "register", primero abre el
-   * diálogo de Términos y Condiciones y solo continúa si el usuario los acepta
-   * (ver TerminosDialog + confirmTerms). El "login" de una cuenta existente va
-   * directo, sin diálogo.
+   * Abre el consentimiento previo al login de Google. Supabase puede crear una
+   * cuenta desde el mismo flujo OAuth, así que ambos intentos deben aceptarlo.
    */
   requestSignIn: (intent: "login" | "register") => void;
-  /** true mientras el diálogo de Términos (previo al registro) está abierto. */
-  termsIntent: "register" | null;
-  /** El usuario ha aceptado los Términos: continúa con el registro por Google. */
+  /** Intención pendiente mientras el diálogo de consentimiento está abierto. */
+  termsIntent: "login" | "register" | null;
+  /** El usuario ha aceptado los Términos: continúa con Google. */
   confirmTerms: () => Promise<void>;
   /** El usuario cierra el diálogo sin aceptar: no se registra. */
   cancelTerms: () => void;
@@ -56,9 +46,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
-  const [termsIntent, setTermsIntent] = useState<"register" | null>(null);
-
-  const handledSignIn = useRef(false);
+  const [termsIntent, setTermsIntent] = useState<"login" | "register" | null>(null);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -66,23 +54,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setLoading(false);
     });
 
-    const { data: subscription } = supabase.auth.onAuthStateChange((event, newSession) => {
+    const { data: subscription } = supabase.auth.onAuthStateChange((_event, newSession) => {
       setSession(newSession);
-
-      if (event !== "SIGNED_IN" || !newSession?.user || handledSignIn.current) return;
-      handledSignIn.current = true;
-
-      const intent = localStorage.getItem(INTENT_KEY) as "login" | "register" | null;
-      localStorage.removeItem(INTENT_KEY);
-
-      if (intent === "login" && isNewAccount(newSession.user)) {
-        supabase.auth.signOut().then(() => {
-          toast.error("No tienes cuenta todavía", {
-            description: "Regístrate primero para poder entrar.",
-          });
-          handledSignIn.current = false;
-        });
-      }
     });
 
     return () => subscription.subscription.unsubscribe();
@@ -120,14 +93,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
   }
 
-  // El registro (y el alta de negocio, que también registra) exige aceptar los
-  // Términos antes de nada. El inicio de sesión de una cuenta ya existente no.
+  // Google OAuth no distingue de antemano entre login y registro: si la cuenta
+  // no existe, Supabase la crea. Por eso ambos caminos exigen consentimiento.
   function requestSignIn(intent: "login" | "register") {
-    if (intent === "login") {
-      void startGoogleOAuth("login");
-      return;
-    }
-    setTermsIntent("register");
+    setTermsIntent(intent);
   }
 
   function cancelTerms() {
@@ -136,8 +105,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   async function confirmTerms() {
     if (!termsIntent) return;
+    const intent = termsIntent;
     setTermsIntent(null);
-    await startGoogleOAuth("register");
+    await startGoogleOAuth(intent);
   }
 
   async function signOut() {
