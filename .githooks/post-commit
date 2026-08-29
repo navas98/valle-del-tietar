@@ -1,0 +1,17 @@
+#!/bin/sh
+
+set -eu
+
+repo_dir=$(git rev-parse --show-toplevel)
+documenter="$repo_dir/.private-tools/documentar-commit.sh"
+
+if [ ! -x "$documenter" ]; then
+  printf 'AVISO: no se ha podido generar la documentación privada: %s no existe o no es ejecutable.\n' "$documenter" >&2
+  exit 0
+fi
+
+if ! "$documenter" HEAD; then
+  printf 'AVISO: el commit se ha creado, pero falló su documentación privada.\n' >&2
+fi
+
+exit 0
