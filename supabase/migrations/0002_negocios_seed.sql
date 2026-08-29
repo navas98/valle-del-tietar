@@ -1,0 +1,11 @@
+insert into public.negocios (nombre, categoria, municipio, descripcion, imagen, abierto, badges) values
+  ('Mesón La Adrada', 'Comer', 'Sotillo de la Adrada', 'Cocina castellana de siempre, con brasa de encina y verdura de la huerta.', 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1200&q=80', true, array['Recomendado']),
+  ('Asador El Roble', 'Comer', 'La Adrada', 'Carnes a la brasa y raciones para compartir en terraza.', 'https://images.unsplash.com/photo-1544025162-d76694265947?w=1200&q=80', true, array[]::text[]),
+  ('Casa Rural El Pinar', 'Dormir', 'Piedralaves', 'Seis habitaciones de piedra con vistas a la sierra y desayuno de productores.', 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1200&q=80', false, array['Cómo ayudar']),
+  ('Hostal Sotillo', 'Dormir', 'Sotillo de la Adrada', 'Habitaciones sencillas en pleno centro, ideal para escapadas cortas.', 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=1200&q=80', true, array[]::text[]),
+  ('Ruta de los Molinos', 'Qué hacer', 'Casavieja', 'Sendero circular de dificultad baja junto al río.', 'https://images.unsplash.com/photo-1551632811-561732d1e306?w=1200&q=80', null, array[]::text[]),
+  ('Garganta de Nuño Cojo', 'Qué hacer', 'Piedralaves', 'Piscina natural rodeada de pinar, perfecta para el verano.', 'https://images.unsplash.com/photo-1439853949127-fa647821eba0?w=1200&q=80', null, array['Historia del Valle']),
+  ('Horno de la Plaza', 'Comercio local', 'La Adrada', 'Pan de masa madre y dulces de la comarca, horneados cada mañana.', 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=1200&q=80', true, array['Recomendado']),
+  ('Miel del Tiétar', 'Comercio local', 'Piedralaves', 'Miel y productos de la colmena de producción propia.', 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=1200&q=80', true, array[]::text[]),
+  ('Pinar de la Umbría', 'Naturaleza', 'Sotillo de la Adrada', 'Zona de pinar con área recreativa y sombra todo el año.', 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1200&q=80', null, array[]::text[]),
+  ('Mirador del Valle', 'Naturaleza', 'La Adrada', 'Vistas panorámicas de todo el Valle del Tiétar.', 'https://images.unsplash.com/photo-1500534623283-312aade485b7?w=1200&q=80', null, array['Recomendado']);
