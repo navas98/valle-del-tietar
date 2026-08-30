@@ -60,8 +60,6 @@ function NegocioCta() {
           Da de alta tu negocio
         </button>
       )}
-
-      
     </div>
   );
 }

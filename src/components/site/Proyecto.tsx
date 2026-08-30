@@ -33,9 +33,9 @@ export function Proyecto() {
             El Valle sigue aquí.
           </h2>
           <p className="mx-auto mt-8 max-w-xl text-lg leading-relaxed text-primary-foreground/70">
-            El fuego pasó en agosto. La factura llega todo el año siguiente: menos reservas,
-            menos mesas llenas, menos motivos para volver. Comer, dormir y comprar aquí no es
-            turismo — es la forma más directa de que estos nueve pueblos sigan de pie.
+            El fuego pasó en agosto. La factura llega todo el año siguiente: menos reservas, menos
+            mesas llenas, menos motivos para volver. Comer, dormir y comprar aquí no es turismo — es
+            la forma más directa de que estos nueve pueblos sigan de pie.
           </p>
         </Reveal>
 

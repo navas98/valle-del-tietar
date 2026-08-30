@@ -1,5 +1,11 @@
 import { useAuth } from "@/lib/auth";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 
 export function RoleGate() {
   const { user, profile, setRole } = useAuth();

@@ -22,8 +22,8 @@ export function Hero() {
           Salvar el valle.
         </h1>
         <p className="mt-7 max-w-xl text-lg leading-relaxed text-primary-foreground/85 sm:text-xl">
-          Pueblos, bosques y negocios de siempre. Visítalos, consume local, y ayuda a que el
-          Valle siga en pie.
+          Pueblos, bosques y negocios de siempre. Visítalos, consume local, y ayuda a que el Valle
+          siga en pie.
         </p>
 
         <div className="mt-9 flex flex-wrap items-center gap-6">

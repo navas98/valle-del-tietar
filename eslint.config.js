@@ -32,8 +32,21 @@ export default tseslint.config(
           ],
         },
       ],
-      "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
+      "react-refresh/only-export-components": [
+        "warn",
+        {
+          allowConstantExport: true,
+          allowExportNames: ["useAuth", "useLightbox"],
+        },
+      ],
       "@typescript-eslint/no-unused-vars": "off",
+    },
+  },
+  {
+    // Los componentes base comparten variantes y hooks por diseño (patrón shadcn/ui).
+    files: ["src/components/ui/**/*.{ts,tsx}"],
+    rules: {
+      "react-refresh/only-export-components": "off",
     },
   },
   eslintPluginPrettier,

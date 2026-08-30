@@ -79,9 +79,9 @@ export function TerminosContenido() {
         para representar o gestionar la presencia de dicho negocio en la Plataforma.
       </P>
       <P>
-        La Plataforma no establece actualmente una edad mínima específica de registro, sin
-        perjuicio de las limitaciones y requisitos que establezca en cada momento la legislación
-        aplicable, especialmente en materia de protección de datos de menores.
+        La Plataforma no establece actualmente una edad mínima específica de registro, sin perjuicio
+        de las limitaciones y requisitos que establezca en cada momento la legislación aplicable,
+        especialmente en materia de protección de datos de menores.
       </P>
 
       <H>5. Contenido aportado por los negocios</H>
@@ -101,7 +101,10 @@ export function TerminosContenido() {
         el negocio será responsable de disponer de las autorizaciones que resulten necesarias para
         permitir los usos previstos en estos Términos.
       </P>
-      <P>El negocio conserva los derechos que legalmente le correspondan sobre el contenido que aporta.</P>
+      <P>
+        El negocio conserva los derechos que legalmente le correspondan sobre el contenido que
+        aporta.
+      </P>
 
       <H>6. Autorización para utilizar, editar y publicar el contenido</H>
       <P>
@@ -113,12 +116,17 @@ export function TerminosContenido() {
       <P>Esta autorización permite a Salvar Valle del Tiétar:</P>
       <UL>
         <li>Publicar y mostrar el contenido en la propia Plataforma.</li>
-        <li>Publicar y difundir el contenido en las cuentas oficiales del proyecto en Instagram.</li>
+        <li>
+          Publicar y difundir el contenido en las cuentas oficiales del proyecto en Instagram.
+        </li>
         <li>
           Reutilizar el contenido en diferentes secciones de la Plataforma o publicaciones de
           Instagram relacionadas con el proyecto.
         </li>
-        <li>Recortar, redimensionar, comprimir o adaptar fotografías y vídeos a los formatos necesarios.</li>
+        <li>
+          Recortar, redimensionar, comprimir o adaptar fotografías y vídeos a los formatos
+          necesarios.
+        </li>
         <li>Editar vídeos y crear versiones más cortas, reels u otras piezas audiovisuales.</li>
         <li>
           Incorporar textos, subtítulos, rótulos, elementos gráficos, música cuando se disponga de
@@ -135,7 +143,10 @@ export function TerminosContenido() {
         individual para cada publicación en la Plataforma o en la cuenta oficial de Instagram del
         proyecto.
       </P>
-      <P>La Plataforma no adquiere la propiedad del contenido por el hecho de recibir esta autorización.</P>
+      <P>
+        La Plataforma no adquiere la propiedad del contenido por el hecho de recibir esta
+        autorización.
+      </P>
 
       <H>7. Contenido prohibido y responsabilidad</H>
       <P>
@@ -156,9 +167,9 @@ export function TerminosContenido() {
         la normativa aplicable.
       </P>
       <P>
-        Cuando exista un incumplimiento, la Plataforma podrá solicitar la corrección de
-        información, ocultar o retirar contenido, suspender temporalmente una cuenta o eliminarla en
-        los casos que lo justifiquen.
+        Cuando exista un incumplimiento, la Plataforma podrá solicitar la corrección de información,
+        ocultar o retirar contenido, suspender temporalmente una cuenta o eliminarla en los casos
+        que lo justifiquen.
       </P>
       <P>
         También podrán adoptarse estas medidas ante suplantaciones de identidad, utilización
@@ -173,8 +184,8 @@ export function TerminosContenido() {
         garantizar que todos los datos sean permanentemente exactos.
       </P>
       <P>
-        Los usuarios deberán confirmar directamente con el establecimiento aquellos datos que
-        puedan cambiar, como horarios, precios, promociones, disponibilidad o servicios ofrecidos.
+        Los usuarios deberán confirmar directamente con el establecimiento aquellos datos que puedan
+        cambiar, como horarios, precios, promociones, disponibilidad o servicios ofrecidos.
       </P>
 
       <H>10. Enlaces y servicios externos</H>
@@ -231,13 +242,13 @@ export function TerminosContenido() {
 
       <H>15. Baja de la cuenta</H>
       <P>
-        Los usuarios y negocios podrán solicitar la eliminación de su cuenta mediante los
-        mecanismos que la Plataforma habilite para ello.
+        Los usuarios y negocios podrán solicitar la eliminación de su cuenta mediante los mecanismos
+        que la Plataforma habilite para ello.
       </P>
       <P>
-        La eliminación de la cuenta no afectará a aquellas obligaciones de conservación que
-        resulten exigibles legalmente ni a los usos del contenido realizados legítimamente con
-        anterioridad a la solicitud de eliminación.
+        La eliminación de la cuenta no afectará a aquellas obligaciones de conservación que resulten
+        exigibles legalmente ni a los usos del contenido realizados legítimamente con anterioridad a
+        la solicitud de eliminación.
       </P>
 
       <H>16. Modificación de los Términos y Condiciones</H>
@@ -254,8 +265,8 @@ export function TerminosContenido() {
 
       <H>17. Legislación aplicable</H>
       <P>
-        Estos Términos y Condiciones se regirán por la legislación española y por la normativa de
-        la Unión Europea que resulte aplicable.
+        Estos Términos y Condiciones se regirán por la legislación española y por la normativa de la
+        Unión Europea que resulte aplicable.
       </P>
       <P>
         Cualquier controversia se resolverá ante los juzgados y tribunales que resulten competentes
