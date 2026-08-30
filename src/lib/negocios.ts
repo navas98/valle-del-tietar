@@ -14,8 +14,8 @@ export const CATEGORIAS_NEGOCIO = [
   "Pueblos",
 ] as const;
 
-// De momento solo se pueden dar de alta negocios de estos dos municipios.
-export const MUNICIPIOS_DISPONIBLES = ["Sotillo de la Adrada", "La Adrada"] as const;
+// Municipios incluidos en la primera fase de lanzamiento.
+export const MUNICIPIOS_DISPONIBLES = ["Sotillo de la Adrada", "La Adrada", "Piedralaves"] as const;
 
 // El escaparate público y las fichas usan exclusivamente la base real.
 export async function fetchNegocios(): Promise<Negocio[]> {

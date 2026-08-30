@@ -6,17 +6,20 @@ import { Navbar } from "@/components/site/Navbar";
 import { Footer } from "@/components/site/Footer";
 import { NegocioCard } from "@/components/site/NegocioCard";
 import p1 from "@/assets/pueblo-1.jpg";
+import p2 from "@/assets/pueblo-2.jpg";
 import p3 from "@/assets/pueblo-3.jpg";
 
 const puebloImages: Record<string, string> = {
   "Sotillo de la Adrada": p1,
   "La Adrada": p3,
+  Piedralaves: p2,
 };
 
 const puebloDescripciones: Record<string, string> = {
   "Sotillo de la Adrada":
     "El corazón del Valle: negocios, naturaleza y vida de pueblo todo el año.",
   "La Adrada": "Historia, castillo y comercio local al pie de la sierra.",
+  Piedralaves: "Vida de pueblo, comercio local y naturaleza en pleno Valle del Tiétar.",
 };
 
 export const Route = createFileRoute("/pueblo/$pueblo")({

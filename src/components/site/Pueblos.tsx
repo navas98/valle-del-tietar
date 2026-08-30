@@ -10,6 +10,7 @@ import { Reveal } from "./Reveal";
 const pueblos = [
   { nombre: "Sotillo de la Adrada", img: p1 },
   { nombre: "La Adrada", img: p3 },
+  { nombre: "Piedralaves", img: p2 },
 ];
 
 export function Pueblos() {
@@ -38,7 +39,7 @@ export function Pueblos() {
           </div>
         </Reveal>
 
-        <div className="mt-6 grid gap-5 sm:grid-cols-2">
+        <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {pueblos.map((p, i) => {
             const totalNegocios = negocios.filter((n) => n.municipio === p.nombre).length;
             return (

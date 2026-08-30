@@ -428,7 +428,8 @@ export function MiNegocioDialog({
               </SelectContent>
             </Select>
             <p className="text-xs text-muted-foreground">
-              De momento solo se pueden dar de alta negocios de estos dos municipios.
+              De momento se pueden dar de alta negocios de Sotillo de la Adrada, La Adrada y
+              Piedralaves.
             </p>
           </div>
 
