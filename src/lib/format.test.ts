@@ -2,8 +2,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { fechaCorta, fechaRelativa } from "./format";
 
 describe("fechaCorta", () => {
-  it("formatea la fecha en español (día, mes en letra, año)", () => {
+  it("formatea la fecha en español sin depender de la zona horaria del dispositivo", () => {
     expect(fechaCorta("2026-03-05T00:00:00.000Z")).toBe("5 de marzo de 2026");
+  });
+
+  it("usa la fecha local de España cuando el UTC cruza la medianoche", () => {
+    expect(fechaCorta("2026-07-31T22:30:00.000Z")).toBe("1 de agosto de 2026");
   });
 });
 

@@ -1,8 +1,11 @@
+const ZONA_HORARIA_PROYECTO = "Europe/Madrid";
+
 export function fechaCorta(iso: string) {
   return new Date(iso).toLocaleDateString("es-ES", {
     day: "numeric",
     month: "long",
     year: "numeric",
+    timeZone: ZONA_HORARIA_PROYECTO,
   });
 }
 

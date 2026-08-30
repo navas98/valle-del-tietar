@@ -12,6 +12,7 @@ import {
   type Negocio,
 } from "@/lib/negocios";
 import { eliminarUsuario, fetchUsuariosAdmin, type Profile } from "@/lib/admin";
+import { fechaCorta } from "@/lib/format";
 import { Navbar } from "@/components/site/Navbar";
 import { Footer } from "@/components/site/Footer";
 
@@ -293,7 +294,7 @@ function FilaUsuario({
           {u.email && <p className="truncate text-xs text-muted-foreground">{u.email}</p>}
           <p className="text-xs text-muted-foreground">
             {u.role === "comercio" ? "Negocio" : u.role === "cliente" ? "Visitante" : "Sin rol"} ·
-            desde {new Date(u.created_at).toLocaleDateString("es-ES")}
+            desde {fechaCorta(u.created_at)}
           </p>
         </div>
       </div>
