@@ -10,8 +10,6 @@ if (!supabaseUrl || !supabasePublishableKey) {
   );
 }
 
-// Cliente contra la base de datos REAL: solo se usa para autenticación
-// (login/registro) y para lo que cuelga directamente del usuario autenticado
-// (perfiles, borrado de cuenta). Los negocios e historias de esta demo NO
-// viven aquí, ver `supabaseDemo` en ./supabaseDemo.
+// Cliente único del proyecto: autenticación, perfiles, negocios, historias,
+// favoritos y almacenamiento usan la misma base de datos real.
 export const supabase = createClient<Database>(supabaseUrl, supabasePublishableKey);
