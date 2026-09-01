@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { createFileRoute, Link, ClientOnly } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -26,6 +26,7 @@ import { Ampliable, Lightbox, useLightbox } from "@/components/site/Lightbox";
 const MapaLeaflet = lazy(() => import("@/components/site/MapaLeaflet"));
 
 export const Route = createFileRoute("/negocio/$id")({
+  head: () => ({ meta: [{ title: "Negocio — Salvar el valle" }] }),
   component: NegocioPage,
 });
 
@@ -71,6 +72,17 @@ function NegocioPage() {
   const galeria = negocio
     ? [negocio.imagen, ...negocio.fotos].filter((u): u is string => Boolean(u))
     : [];
+
+  // El head de la ruta no tiene acceso a los datos del negocio (se cargan por
+  // react-query en cliente), así que el título fino se ajusta aquí al llegar.
+  useEffect(() => {
+    if (!negocio || typeof document === "undefined") return;
+    const previo = document.title;
+    document.title = `${negocio.nombre} · ${negocio.municipio} — Salvar el valle`;
+    return () => {
+      document.title = previo;
+    };
+  }, [negocio]);
 
   const webUrl = normalizarUrlExterna(negocio?.web);
 
