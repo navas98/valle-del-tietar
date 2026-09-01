@@ -6,6 +6,7 @@ import { useAuth } from "@/lib/auth";
 import {
   CATEGORIAS_NEGOCIO,
   MUNICIPIOS_DISPONIBLES,
+  borrarArchivosNegocio,
   fetchMiNegocio,
   guardarMiNegocio,
   subirArchivoNegocio,
@@ -226,6 +227,13 @@ export function MiNegocioDialog({
         facebook: facebook || null,
         whatsapp: whatsapp || null,
       });
+      // Limpia del bucket los archivos que estaban guardados y ya no se usan.
+      if (negocio) {
+        const antes = [negocio.imagen, negocio.video_url, negocio.audio_url, ...negocio.fotos];
+        const ahora = new Set([imagen, videoUrl, audioUrl, ...fotos]);
+        const huerfanos = antes.filter((u): u is string => Boolean(u) && !ahora.has(u));
+        if (huerfanos.length > 0) void borrarArchivosNegocio(huerfanos);
+      }
       await queryClient.invalidateQueries({ queryKey: ["mi-negocio", user.id] });
       await queryClient.invalidateQueries({ queryKey: ["negocios"] });
       toast.success("Ficha del negocio guardada");

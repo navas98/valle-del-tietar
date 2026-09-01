@@ -86,6 +86,22 @@ export async function subirArchivoNegocio(ownerId: string, file: File): Promise<
   return supabase.storage.from("negocios").getPublicUrl(path).data.publicUrl;
 }
 
+const MARCA_PUBLICA_NEGOCIOS = "/storage/v1/object/public/negocios/";
+
+// Borra del bucket los archivos cuyas URL públicas se pasan. Se usa al guardar
+// la ficha para no dejar huérfanos los archivos que el usuario ha quitado.
+// Ignora las URL que no apunten al bucket (p. ej. avatares de Google).
+export async function borrarArchivosNegocio(urls: string[]): Promise<void> {
+  const paths = urls
+    .map((url) => {
+      const i = url.indexOf(MARCA_PUBLICA_NEGOCIOS);
+      return i === -1 ? null : decodeURIComponent(url.slice(i + MARCA_PUBLICA_NEGOCIOS.length));
+    })
+    .filter((p): p is string => Boolean(p));
+  if (paths.length === 0) return;
+  await supabase.storage.from("negocios").remove(paths);
+}
+
 export async function fetchMisFavoritos(
   userId: string,
 ): Promise<(Favorito & { negocio: Negocio })[]> {
