@@ -11,6 +11,7 @@ import {
   subirArchivoNegocio,
 } from "@/lib/negocios";
 import { loadGoogleMaps } from "@/lib/google-maps";
+import { normalizarUrlExterna } from "@/lib/url";
 import {
   Dialog,
   DialogContent,
@@ -220,7 +221,7 @@ export function MiNegocioDialog({
         horario: horario || null,
         telefono: telefono || null,
         email: email || null,
-        web: web || null,
+        web: normalizarUrlExterna(web),
         instagram: instagram || null,
         facebook: facebook || null,
         whatsapp: whatsapp || null,

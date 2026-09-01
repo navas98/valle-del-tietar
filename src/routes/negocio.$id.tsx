@@ -17,6 +17,7 @@ import {
   Tag,
 } from "lucide-react";
 import { esFavorito, fetchNegocioPorId, marcarFavorito, quitarFavorito } from "@/lib/negocios";
+import { normalizarUrlExterna } from "@/lib/url";
 import { useAuth } from "@/lib/auth";
 import { Navbar } from "@/components/site/Navbar";
 import { Footer } from "@/components/site/Footer";
@@ -71,13 +72,15 @@ function NegocioPage() {
     ? [negocio.imagen, ...negocio.fotos].filter((u): u is string => Boolean(u))
     : [];
 
+  const webUrl = normalizarUrlExterna(negocio?.web);
+
   const tieneContacto =
     negocio &&
     (negocio.horario ||
       negocio.telefono ||
       negocio.whatsapp ||
       negocio.email ||
-      negocio.web ||
+      webUrl ||
       negocio.instagram ||
       negocio.facebook);
 
@@ -270,9 +273,9 @@ function NegocioPage() {
                           <span className="truncate">{negocio.email}</span>
                         </a>
                       )}
-                      {negocio.web && (
+                      {webUrl && (
                         <a
-                          href={negocio.web}
+                          href={webUrl}
                           target="_blank"
                           rel="noreferrer"
                           className="flex items-center gap-2.5 hover:opacity-70"
