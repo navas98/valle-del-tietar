@@ -78,10 +78,9 @@ export async function subirArchivoNegocio(ownerId: string, file: File): Promise<
   const extNombre = nombrePartes.length > 1 ? nombrePartes.pop()!.toLowerCase() : "";
   const ext = extNombre || EXTENSION_POR_MIME[file.type] || "bin";
   const path = `${ownerId}/${crypto.randomUUID()}.${ext}`;
-  const { error } = await supabase.storage.from("negocios").upload(path, file, {
-    upsert: true,
-    contentType: file.type || undefined,
-  });
+  const { error } = await supabase.storage
+    .from("negocios")
+    .upload(path, file, file.type ? { upsert: true, contentType: file.type } : { upsert: true });
   if (error) throw error;
   return supabase.storage.from("negocios").getPublicUrl(path).data.publicUrl;
 }
