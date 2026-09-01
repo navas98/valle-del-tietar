@@ -6,11 +6,13 @@ import { useAuth } from "@/lib/auth";
 import {
   CATEGORIAS_NEGOCIO,
   MUNICIPIOS_DISPONIBLES,
+  borrarArchivosNegocio,
   fetchMiNegocio,
   guardarMiNegocio,
   subirArchivoNegocio,
 } from "@/lib/negocios";
 import { loadGoogleMaps } from "@/lib/google-maps";
+import { normalizarUrlExterna } from "@/lib/url";
 import {
   Dialog,
   DialogContent,
@@ -220,11 +222,18 @@ export function MiNegocioDialog({
         horario: horario || null,
         telefono: telefono || null,
         email: email || null,
-        web: web || null,
+        web: normalizarUrlExterna(web),
         instagram: instagram || null,
         facebook: facebook || null,
         whatsapp: whatsapp || null,
       });
+      // Limpia del bucket los archivos que estaban guardados y ya no se usan.
+      if (negocio) {
+        const antes = [negocio.imagen, negocio.video_url, negocio.audio_url, ...negocio.fotos];
+        const ahora = new Set([imagen, videoUrl, audioUrl, ...fotos]);
+        const huerfanos = antes.filter((u): u is string => Boolean(u) && !ahora.has(u));
+        if (huerfanos.length > 0) void borrarArchivosNegocio(huerfanos);
+      }
       await queryClient.invalidateQueries({ queryKey: ["mi-negocio", user.id] });
       await queryClient.invalidateQueries({ queryKey: ["negocios"] });
       toast.success("Ficha del negocio guardada");

@@ -27,6 +27,23 @@ function jsonResponse(body: unknown, status = 200) {
   });
 }
 
+// Compara el secreto en tiempo constante: se contrastan los hashes SHA-256,
+// de longitud fija, para no filtrar el valor esperado por el tiempo de
+// respuesta ni por dónde falla el primer carácter distinto.
+async function secretoValido(recibido: string | null, esperado: string): Promise<boolean> {
+  if (!recibido) return false;
+  const enc = new TextEncoder();
+  const [a, b] = await Promise.all([
+    crypto.subtle.digest("SHA-256", enc.encode(recibido)),
+    crypto.subtle.digest("SHA-256", enc.encode(esperado)),
+  ]);
+  const va = new Uint8Array(a);
+  const vb = new Uint8Array(b);
+  let diff = 0;
+  for (let i = 0; i < va.length; i++) diff |= va[i]! ^ vb[i]!;
+  return diff === 0;
+}
+
 type WebhookPayload = {
   type: "INSERT" | "UPDATE" | "DELETE";
   table: string;
@@ -42,7 +59,7 @@ Deno.serve(async (req) => {
   }
 
   const webhookSecret = Deno.env.get("WEBHOOK_SECRET");
-  if (!webhookSecret || req.headers.get("x-webhook-secret") !== webhookSecret) {
+  if (!webhookSecret || !(await secretoValido(req.headers.get("x-webhook-secret"), webhookSecret))) {
     return jsonResponse({ error: "No autorizado" }, 401);
   }
 

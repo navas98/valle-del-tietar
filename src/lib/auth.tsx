@@ -62,25 +62,46 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    if (!session?.user) {
+    const userId = session?.user?.id;
+    if (!userId) {
       setProfile(null);
       return;
     }
 
     let cancelled = false;
-    supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", session.user.id)
-      .single()
-      .then(({ data }) => {
-        if (!cancelled) setProfile(data);
-      });
+
+    // Justo tras el primer login la fila de profiles la crea el trigger
+    // on_auth_user_created, que puede tardar unos ms en estar disponible.
+    // Con .single() un 0 filas es error y el perfil se quedaba null para
+    // siempre (sin RoleGate hasta recargar); .maybeSingle() + reintentos
+    // cortos cubren ese hueco.
+    async function cargarPerfil() {
+      for (let intento = 0; intento < 5 && !cancelled; intento++) {
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", userId!)
+          .maybeSingle();
+
+        if (cancelled) return;
+        if (data) {
+          setProfile(data);
+          return;
+        }
+        if (error) {
+          console.error(error);
+          return;
+        }
+        await new Promise((r) => setTimeout(r, 400 * (intento + 1)));
+      }
+    }
+
+    void cargarPerfil();
 
     return () => {
       cancelled = true;
     };
-  }, [session?.user]);
+  }, [session?.user?.id]);
 
   async function startGoogleOAuth(intent: "login" | "register") {
     localStorage.setItem(INTENT_KEY, intent);

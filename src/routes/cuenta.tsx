@@ -35,6 +35,7 @@ import {
   subirArchivoNegocio,
   type Negocio,
 } from "@/lib/negocios";
+import { normalizarUrlExterna } from "@/lib/url";
 import { Navbar } from "@/components/site/Navbar";
 import { Footer } from "@/components/site/Footer";
 import { MiNegocioDialog } from "@/components/site/MiNegocioDialog";
@@ -624,9 +625,9 @@ function PerfilEmpresa({ userId }: { userId: string }) {
                   <span className="truncate">{negocio.email}</span>
                 </a>
               )}
-              {negocio.web && (
+              {normalizarUrlExterna(negocio.web) && (
                 <a
-                  href={negocio.web}
+                  href={normalizarUrlExterna(negocio.web)!}
                   target="_blank"
                   rel="noreferrer"
                   className="flex items-center gap-2.5 hover:opacity-70"
