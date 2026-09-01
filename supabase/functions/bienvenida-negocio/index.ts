@@ -13,8 +13,17 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type, x-webhook-secret",
 };
+
+function escapeHtml(value: string) {
+  return value.replace(
+    /[&<>'"]/g,
+    (character) =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" })[character]!,
+  );
+}
 
 function jsonResponse(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
@@ -47,6 +56,11 @@ Deno.serve(async (req) => {
     return jsonResponse({ error: "Método no permitido" }, 405);
   }
 
+  const webhookSecret = Deno.env.get("WEBHOOK_SECRET");
+  if (!webhookSecret || req.headers.get("x-webhook-secret") !== webhookSecret) {
+    return jsonResponse({ error: "No autorizado" }, 401);
+  }
+
   const resendApiKey = Deno.env.get("RESEND_API_KEY");
   const supabaseUrl = Deno.env.get("SUPABASE_URL");
   const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
@@ -68,16 +82,19 @@ Deno.serve(async (req) => {
 
   let asunto: string;
   let html: string;
+  const nombreNegocio = escapeHtml(negocio.nombre);
+  const categoria = escapeHtml(negocio.categoria);
+  const municipio = escapeHtml(negocio.municipio);
 
   if (payload.type === "INSERT") {
     asunto = `Hemos recibido tu negocio "${negocio.nombre}"`;
-    html = `<p>Hemos recibido la ficha de <strong>${negocio.nombre}</strong>
-      (${negocio.categoria} · ${negocio.municipio}).</p>
+    html = `<p>Hemos recibido la ficha de <strong>${nombreNegocio}</strong>
+      (${categoria} · ${municipio}).</p>
       <p>Está pendiente de revisión — en cuanto la aprobemos, aparecerá en el
       listado de negocios y en el mapa del Valle. Te avisaremos.</p>`;
   } else if (payload.type === "UPDATE" && !payload.old_record?.aprobado && negocio.aprobado) {
     asunto = `¡Tu negocio "${negocio.nombre}" ya está publicado!`;
-    html = `<p>Buenas noticias: <strong>${negocio.nombre}</strong> ya es visible
+    html = `<p>Buenas noticias: <strong>${nombreNegocio}</strong> ya es visible
       en el listado de negocios y en el mapa del Valle.</p>`;
   } else {
     // Cualquier otro cambio (editar descripción, retirar, etc.) no manda email.
@@ -107,7 +124,7 @@ Deno.serve(async (req) => {
       subject: asunto,
       html: `
         <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto;">
-          <h1 style="font-size: 20px;">¡Hola${perfil.nombre ? `, ${perfil.nombre}` : ""}!</h1>
+          <h1 style="font-size: 20px;">¡Hola${perfil.nombre ? `, ${escapeHtml(perfil.nombre)}` : ""}!</h1>
           ${html}
         </div>
       `,

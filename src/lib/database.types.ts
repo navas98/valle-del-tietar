@@ -26,6 +26,8 @@ export type Database = {
           whatsapp: string | null;
           horario: string | null;
           aprobado: boolean;
+          listo_para_instagram: boolean;
+          publicado_instagram_at: string | null;
           created_at: string;
         };
         Insert: {
@@ -52,6 +54,8 @@ export type Database = {
           whatsapp?: string | null;
           horario?: string | null;
           aprobado?: boolean;
+          listo_para_instagram?: boolean;
+          publicado_instagram_at?: string | null;
           created_at?: string;
         };
         Update: Partial<Database["public"]["Tables"]["negocios"]["Insert"]>;
@@ -124,6 +128,12 @@ export type Database = {
           created_at?: string;
         };
         Update: Partial<Database["public"]["Tables"]["favoritos"]["Insert"]>;
+      };
+    };
+    Functions: {
+      contar_favoritos_negocio: {
+        Args: { p_negocio_id: string };
+        Returns: number;
       };
     };
   };

@@ -8,8 +8,17 @@
 // frontend.
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type, x-webhook-secret",
 };
+
+function escapeHtml(value: string) {
+  return value.replace(
+    /[&<>'"]/g,
+    (character) =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" })[character]!,
+  );
+}
 
 function jsonResponse(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
@@ -30,6 +39,11 @@ Deno.serve(async (req) => {
   }
   if (req.method !== "POST") {
     return jsonResponse({ error: "Método no permitido" }, 405);
+  }
+
+  const webhookSecret = Deno.env.get("WEBHOOK_SECRET");
+  if (!webhookSecret || req.headers.get("x-webhook-secret") !== webhookSecret) {
+    return jsonResponse({ error: "No autorizado" }, 401);
   }
 
   const resendApiKey = Deno.env.get("RESEND_API_KEY");
@@ -62,7 +76,7 @@ Deno.serve(async (req) => {
       subject: "¡Bienvenido/a a Salvar el valle!",
       html: `
         <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto;">
-          <h1 style="font-size: 20px;">¡Hola${perfil.nombre ? `, ${perfil.nombre}` : ""}!</h1>
+          <h1 style="font-size: 20px;">¡Hola${perfil.nombre ? `, ${escapeHtml(perfil.nombre)}` : ""}!</h1>
           <p>Tu cuenta en <strong>Salvar el valle</strong> ya está creada.
           Ya puedes descubrir negocios, pueblos y experiencias del Valle del Tiétar.</p>
           <p>Gracias por unirte.</p>

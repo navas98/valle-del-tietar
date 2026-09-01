@@ -100,12 +100,11 @@ export async function quitarFavorito(userId: string, negocioId: string): Promise
 }
 
 export async function contarFavoritosDeNegocio(negocioId: string): Promise<number> {
-  const { count, error } = await supabase
-    .from("favoritos")
-    .select("id", { count: "exact", head: true })
-    .eq("negocio_id", negocioId);
+  const { data, error } = await supabase.rpc("contar_favoritos_negocio", {
+    p_negocio_id: negocioId,
+  });
   if (error) throw error;
-  return count ?? 0;
+  return data ?? 0;
 }
 
 // Gracias a RLS, esta consulta debe devolver al público solo los negocios
