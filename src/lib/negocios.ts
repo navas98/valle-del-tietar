@@ -17,9 +17,13 @@ export const CATEGORIAS_NEGOCIO = [
 // Municipios incluidos en la primera fase de lanzamiento.
 export const MUNICIPIOS_DISPONIBLES = ["Sotillo de la Adrada", "La Adrada", "Piedralaves"] as const;
 
-// El escaparate público y las fichas usan exclusivamente la base real.
+// Escaparate público (Explora, categorías, pueblos y mapa): solo negocios
+// aprobados. RLS deja ver además los pendientes al dueño y al admin, así que
+// aquí se filtra de forma explícita para que no se cuelen en los listados
+// públicos cuando quien navega está logueado. La ficha de "Mi negocio" y el
+// panel de administración usan fetchMiNegocio / fetchNegociosAdmin.
 export async function fetchNegocios(): Promise<Negocio[]> {
-  const { data, error } = await supabase.from("negocios").select("*");
+  const { data, error } = await supabase.from("negocios").select("*").eq("aprobado", true);
   if (error) throw error;
   return data;
 }
