@@ -50,11 +50,33 @@ export async function guardarMiNegocio(input: NegocioInput): Promise<Negocio> {
   return data;
 }
 
+// Extensiones aceptadas por tipo MIME cuando el nombre del archivo no la trae
+// (p. ej. capturas de pantalla al pegar). El bucket restringe estos mismos
+// tipos, así que un archivo fuera de la lista lo rechaza el servidor.
+const EXTENSION_POR_MIME: Record<string, string> = {
+  "image/jpeg": "jpg",
+  "image/png": "png",
+  "image/webp": "webp",
+  "image/avif": "avif",
+  "image/gif": "gif",
+  "video/mp4": "mp4",
+  "video/webm": "webm",
+  "video/quicktime": "mov",
+  "audio/mpeg": "mp3",
+  "audio/mp4": "m4a",
+  "audio/ogg": "ogg",
+  "audio/webm": "weba",
+  "audio/wav": "wav",
+};
+
 export async function subirArchivoNegocio(ownerId: string, file: File): Promise<string> {
-  const ext = file.name.split(".").pop();
+  const nombrePartes = file.name.split(".");
+  const extNombre = nombrePartes.length > 1 ? nombrePartes.pop()!.toLowerCase() : "";
+  const ext = extNombre || EXTENSION_POR_MIME[file.type] || "bin";
   const path = `${ownerId}/${crypto.randomUUID()}.${ext}`;
   const { error } = await supabase.storage.from("negocios").upload(path, file, {
     upsert: true,
+    contentType: file.type || undefined,
   });
   if (error) throw error;
   return supabase.storage.from("negocios").getPublicUrl(path).data.publicUrl;
